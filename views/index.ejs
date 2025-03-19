@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Steam</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css"> <!-- Link para o CSS personalizado -->
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-5">Biblioteca Steam</h1>
+        
+        <% if (profile) { %>
+            <div class="profile-box text-center mb-5 p-4 rounded">
+                <h2 class="text-white"><%= profile.name %></h2>
+                <img src="<%= profile.avatar %>" alt="<%= profile.name %>" class="rounded-circle" width="120" height="120">
+            </div>
+            <script>
+                localStorage.setItem('steamId', '<%= profile.steamId %>');
+            </script>
+        <% } %>
+
+        <form method="POST" class="mb-4" id="steam-form">
+            <div class="input-group">
+                <input type="text" name="steam_id" class="form-control" placeholder="Digite seu Steam ID" required>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Buscar Dados</button>
+                </div>
+            </div>
+        </form>
+
+        <% if (error) { %>
+            <div class="alert alert-danger text-center" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+        
+        <% if (games.length > 0) { %>
+            <div class="row">
+                <% games.forEach(game => { %>
+                    <div class="col-md-4 mb-4 game-item">
+                        <div class="card">
+                            <img src="<%= game.imageUrl %>" alt="<%= game.name %>" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= game.name %></h5>
+                                <p class="card-text">Avaliação: <%= game.rating %></p>
+                                <p class="card-text">Data de Lançamento: <%= game.releaseDate %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function sortGames() {
+            const steamId = localStorage.getItem('steamId');
+            const sortValue = document.getElementById("sort").value;
+
+            fetch(`/sort-games?steamId=${steamId}&sort=${sortValue}`, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(sortedGames => {
+                const gameContainer = document.querySelector('.row');
+                gameContainer.innerHTML = ''; 
+
+                sortedGames.forEach(game => {
+                    const gameCard = `
+                        <div class="col-md-4 mb-4 game-item">
+                            <div class="card">
+                                <img src="${game.imageUrl}" alt="${game.name}" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">${game.name}</h5>
+                                    <p class="card-text">Avaliação: ${game.rating}</p>
+                                    <p class="card-text">Data de Lançamento: ${game.releaseDate}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    gameContainer.innerHTML += gameCard;
+                });
+            });
+        }
+    </script>
+</body>
+</html>

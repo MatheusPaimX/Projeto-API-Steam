@@ -1,0 +1,53 @@
+/* Estilos gerais */
+body {
+    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    padding-top: 50px;
+}
+
+/* Quadrado azul para o perfil do usuário */
+.profile-box {
+    background-color: #007BFF;
+    color: white;
+}
+
+.profile-box h2 {
+    margin-top: 0;
+}
+
+/* Estilo para os jogos */
+.games {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.game-item {
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.game-item p {
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .game-item {
+        width: 95%;
+    }
+}
